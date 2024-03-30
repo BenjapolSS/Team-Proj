@@ -1,0 +1,144 @@
+// Define the pins for the MAX7219 driver
+const int DIN_PIN = 11;
+const int CS_PIN = 10;
+const int CLK_PIN = 13;
+
+// Define the number of MAX7219 modules and the number of digits per module
+const int NUM_MODULES = 1;
+const int NUM_DIGITS = 8;
+
+void setup() {
+  // Set the pins as outputs
+  pinMode(DIN_PIN, OUTPUT);
+  pinMode(CS_PIN, OUTPUT);
+  pinMode(CLK_PIN, OUTPUT);
+
+  // Initialize the MAX7219 driver
+  sendCommand(0x09, 0x00);   // Decode mode: no decode for any digit
+  sendCommand(0x0a, 0x03);   // Intensity: maximum brightness
+  sendCommand(0x0b, 0x07);   // Scan limit: all digits
+  sendCommand(0x0c, 0x01);   // Shutdown: normal operation
+  sendCommand(0x0f, 0x00);   // Display test: off
+}
+
+void loop() {
+  //Start
+  sendDigit(1, 0b00000001);
+  sendDigit(2, 0b00000011);
+  sendDigit(3, 0b00000101);
+  sendDigit(4, 0b00001001);
+  sendDigit(5, 0b00010001); 
+  sendDigit(6, 0b00100001); 
+  sendDigit(7, 0b01000001); 
+  sendDigit(8, 0b11111111); 
+  delay(900);
+  
+ //G
+  sendDigit(1, 0b00000000);
+  sendDigit(2, 0b11011110);
+  sendDigit(3, 0b11011111);
+  sendDigit(4, 0b11011011);
+  sendDigit(5, 0b11000011); 
+  sendDigit(6, 0b11111111); 
+  sendDigit(7, 0b01111110); 
+  sendDigit(8, 0b00000000); 
+  delay(900);
+
+//U
+  sendDigit(1, 0b00000000);
+  sendDigit(2, 0b11111110);
+  sendDigit(3, 0b11111111);
+  sendDigit(4, 0b00000011);
+  sendDigit(5, 0b00000011);
+  sendDigit(6, 0b11111111);
+  sendDigit(7, 0b11111110);
+  sendDigit(8, 0b00000000);
+  delay(900);
+  
+//Y
+  sendDigit(1, 0b00000000);
+  sendDigit(2, 0b11110000);
+  sendDigit(3, 0b11111000);
+  sendDigit(4, 0b00001111);
+  sendDigit(5, 0b00001111);
+  sendDigit(6, 0b11111000);
+  sendDigit(7, 0b11110000);
+  sendDigit(8, 0b00000000);
+  delay(900);
+  
+//0
+  sendDigit(1, 0b00000000);
+  sendDigit(2, 0b01111110);
+  sendDigit(3, 0b11111111);
+  sendDigit(4, 0b11000011);
+  sendDigit(5, 0b11000011);
+  sendDigit(6, 0b11111111);
+  sendDigit(7, 0b01111110);
+  sendDigit(8, 0b00000000);
+  delay(900); 
+  
+//0
+  sendDigit(1, 0b00000000);
+  sendDigit(2, 0b01111110);
+  sendDigit(3, 0b11111111);
+  sendDigit(4, 0b11000011);
+  sendDigit(5, 0b11000011);
+  sendDigit(6, 0b11111111);
+  sendDigit(7, 0b01111110);
+  sendDigit(8, 0b00000000);
+  delay(900);
+  
+//2
+  sendDigit(1, 0b00000000);
+  sendDigit(2, 0b01110011);
+  sendDigit(3, 0b11111011);
+  sendDigit(4, 0b11011111);
+  sendDigit(5, 0b11001111);
+  sendDigit(6, 0b11100111);
+  sendDigit(7, 0b01100011);
+  sendDigit(8, 0b00000000);
+  delay(900);
+  
+//5
+  sendDigit(1, 0b00000000);
+  sendDigit(2, 0b11001110);
+  sendDigit(3, 0b11011111);
+  sendDigit(4, 0b11011011);
+  sendDigit(5, 0b11011011);
+  sendDigit(6, 0b11111011);
+  sendDigit(7, 0b11111010);
+  sendDigit(8, 0b00000000);
+  delay(900);
+  
+//stop0331
+  sendDigit(1, 0b11100111);
+  sendDigit(2, 0b10011001);
+  sendDigit(3, 0b10011001);
+  sendDigit(4, 0b01111110);
+  sendDigit(5, 0b00001110);
+  sendDigit(6, 0b00001001);
+  sendDigit(7, 0b10001001);
+  sendDigit(8, 0b11000111);
+  delay(900);  
+}
+
+// Sends a command to the MAX7219 driver
+void sendCommand(byte address, byte data) {
+  digitalWrite(CS_PIN, LOW);
+  for (int i = 0; i < NUM_MODULES; i++) {
+    shiftOut(DIN_PIN, CLK_PIN, MSBFIRST, address);
+    shiftOut(DIN_PIN, CLK_PIN, MSBFIRST, data);
+  }
+  digitalWrite(CS_PIN, HIGH);
+}
+
+// Sends a digit to the MAX7219 driver
+void sendDigit(int digit, byte data) {
+  digitalWrite(CS_PIN, LOW);
+  for (int i = 0; i < NUM_MODULES; i++) {
+    shiftOut(DIN_PIN, CLK_PIN, MSBFIRST, digit);
+    shiftOut(DIN_PIN, CLK_PIN, MSBFIRST, data);
+  }
+  digitalWrite(CS_PIN, HIGH);
+}
+ 
